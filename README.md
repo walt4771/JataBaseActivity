@@ -9,11 +9,7 @@
 
 # Updates
 
-2022.03.17
-```
-add fab for a better accessability
-recepit image adjustment
-```
+> 2022.03.17 - add fab for a better accessability, recepit image adjustment
 
 # 권한 설명
 1.
