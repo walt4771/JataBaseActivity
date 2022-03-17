@@ -14,6 +14,7 @@ import android.provider.Settings
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -23,6 +24,8 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -50,33 +53,42 @@ class MainActivity : AppCompatActivity() {
             "8096" -> { text_lib_name.text = "비산도서관" }
         }
 
-        getButton.setOnClickListener {
-            Log.e("DEBUG", "BUTTON PRESSED")
-            if (isAirplaneModeOn(this)) { Toast.makeText(applicationContext, "정보 가져오기 실패 (비행기 모드)", Toast.LENGTH_LONG).show() }
-            else {
-                if((text_waitnum.text).toString().toInt() < 0) { Toast.makeText(applicationContext, "올바르지 않은 대기 번호입니다", Toast.LENGTH_LONG).show() }
-                else{
-                    // Change Preference, key_waitnum
-                    val sharedPref = PreferenceManager.getDefaultSharedPreferences(this)
-                    val edit = sharedPref.edit()
-                    edit.putString("key_waitnum", text_waitnum.text.toString())
-                    edit.apply()
 
-                    // SetAlarm
-                    val intent = Intent(applicationContext, NotiIntentService::class.java)
-                    val pending = PendingIntent.getService(applicationContext, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT)
-                    val calendar = Calendar.getInstance()
+        val fab = findViewById<View>(R.id.fab_btn) as FloatingActionButton
+        fab.setOnClickListener {
+            val dialog = CustomDialog(this)
+            dialog.showDialog()
+            dialog.setOnClickListener(object: CustomDialog.ButtonClickListener{
+                @SuppressLint("MissingPermission")
+                override fun onClicked(text_waitnum: String) {
+                    Log.e("DEBUG", "BUTTON PRESSED")
+                    if (isAirplaneModeOn(applicationContext)) { Toast.makeText(applicationContext, "정보 가져오기 실패 (비행기 모드)", Toast.LENGTH_LONG).show() }
+                    else {
+                        if((text_waitnum).toInt() < 0) { Toast.makeText(applicationContext, "올바르지 않은 대기 번호입니다", Toast.LENGTH_LONG).show() }
+                        else{
+                            // Change Preference, key_waitnum
+                            val sharedPref = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+                            val edit = sharedPref.edit()
+                            edit.putString("key_waitnum", text_waitnum)
+                            edit.apply()
 
-                    // AlarmManager을 이용해서, 특정시간에 MyService 서비스가 시작되도록 하는 코드
-                    val am = applicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-                    am.setRepeating(
-                        AlarmManager.RTC_WAKEUP,
-                        calendar.timeInMillis,
-                        1 * 60 * 1000,
-                        pending
-                    )
+                            // SetAlarm
+                            val intent = Intent(applicationContext, NotiIntentService::class.java)
+                            val pending = PendingIntent.getService(applicationContext, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT)
+                            val calendar = Calendar.getInstance()
+
+                            // AlarmManager을 이용해서, 특정시간에 MyService 서비스가 시작되도록 하는 코드
+                            val am = applicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+                            am.setRepeating(
+                                AlarmManager.RTC_WAKEUP,
+                                calendar.timeInMillis,
+                                1 * 60 * 1000,
+                                pending
+                            )
+                        }
+                    }
                 }
-            }
+            })
         }
     }
 
