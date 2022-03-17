@@ -7,6 +7,11 @@
 **전화번호 열람은 본인의 전화로 메세지를 보내기 위해 사용합니다.**
 **또한 어떠한 정보도 외부로 전달하지 않습니다.**
 
+# Updates
+
+> 2022.03.17
+> **add fab** for a better accessability
+> recepit **image adjustment**
 
 # 권한 설명
 1.
@@ -101,8 +106,4 @@ fun sendSMS() {
 }
 ```
 `READ_PHONE_STATE` 권한이 추가로 필요한 이유는 `SmsManager`가 메시지를 보내기 전 휴대 전화 상태를 확인하기 때문입니다. 
-
-# 앱의 동작 방식
-
-> 곧 업데이트 됩니다
 
