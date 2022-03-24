@@ -18,11 +18,9 @@ add fab for a better accessability, recepit image adjustment
 Dark Mode support, change recepit image due to Dark Mode support
 ```
 
-Light Mode
 <img src="https://github.com/walt4771/LibCrawler_Android/blob/master/LibCrawler_Light.png" height="500px" width="225px">
 
-Dark Mode
-<img src="https://github.com/walt4771/LibCrawler_Android/blob/master/LibCrawler_Dark.png" height="100x" width="45px">
+<img src="https://github.com/walt4771/LibCrawler_Android/blob/master/LibCrawler_Dark.png" height="500px" width="225px">
 
 
 # 권한 설명
