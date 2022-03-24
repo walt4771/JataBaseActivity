@@ -13,9 +13,9 @@
 ```
 add fab for a better accessability, recepit image adjustment
 ```
-> 
+> 2022.03.24
 ```
-2022.03.24 - Dark Mode support, change recepit image due to Dark Mode support
+Dark Mode support, change recepit image due to Dark Mode support
 ```
 
 # 권한 설명
