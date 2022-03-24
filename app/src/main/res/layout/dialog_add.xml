@@ -1,63 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/textview_info_2"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
-        android:layout_marginTop="252dp"
         android:fontFamily="sans-serif"
-        android:text=" 대기번호를 입력해주세요 "
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        android:id="@+id/text_waitnum"
-        android:layout_width="95dp"
-        android:layout_height="42dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginBottom="40dp"
-        android:layout_weight="1"
-        android:ems="10"
-        android:hint="대기번호 입력"
-        android:inputType="number"
-        android:textSize="8sp"
-        app:layout_constraintBottom_toTopOf="@+id/getButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.503"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textview_info_2" />
-
-    <Button
-        android:id="@+id/getButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="40dp"
-        android:text="알려주세요!"
-        android:textAllCaps="false"
-        app:layout_constraintBottom_toTopOf="@+id/text_info_1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:text=" 다음에 다시 방문하려는 장소의 "
+        android:textSize="20sp" />
 
     <TextView
-        android:id="@+id/text_info_1"
-        android:layout_width="285dp"
-        android:layout_height="27dp"
-        android:layout_marginBottom="240dp"
-        android:text="버튼을 누르면 차례에 알려 드립니다"
-        android:textAlignment="center"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:id="@+id/textview_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
+        android:text=" 정보를 입력해주세요"
+        android:textSize="20sp" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/textview_addname"
+            android:layout_width="5dp"
+            android:layout_height="27dp"
+            android:layout_weight="1"
+            android:text="  장소 별명"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/textedit_addname"
+            android:layout_width="110dp"
+            android:layout_height="38dp"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="다음에 다시 방문하려는 장소의 애칭을 입력해주세요"
+            android:inputType="textPersonName"
+            android:textSize="8sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textview_addcontact"
+            android:layout_width="8dp"
+            android:layout_height="27dp"
+            android:layout_weight="1"
+            android:text="  체크인 번호"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/textedit_addcontact"
+            android:layout_width="110dp"
+            android:layout_height="38dp"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="다음에 다시 방문하려는 장소의 체크인 번호를 입력해주세요"
+            android:inputType="textPersonName"
+            android:textSize="8sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:layout_marginEnd="20dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/cancel_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="취소"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/finish_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="완료"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
+</LinearLayout>
