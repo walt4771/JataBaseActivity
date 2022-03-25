@@ -8,6 +8,6 @@
     <!-- always = 항상 표시, never = 오버플로우 메뉴에 표시, ifRoom = 공간이 있으면 표시 -->
 
     <item android:id="@+id/action_btn2"
-        android:title="ClearDB"
+        android:title="getCurrentData"
         app:showAsAction="never" />
 </menu>

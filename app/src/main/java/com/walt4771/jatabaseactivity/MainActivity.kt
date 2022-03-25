@@ -9,31 +9,24 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.os.SystemClock
 import android.provider.Settings
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import java.lang.Exception
 import java.util.*
 import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity() {
-    private val viewModel: MainViewModel by viewModels()
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,16 +36,11 @@ class MainActivity : AppCompatActivity() {
 
         val sharedPreferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(application)
         when (sharedPreferences.getString("key_libselect", "8094")) {
-            // 박달도서관(8093)
             "8093" -> { text_lib_name.text = "박달도서관" }
-            // 평촌도서관(8094)
             "8094" -> { text_lib_name.text = "평촌도서관" }
-            // 호계도서관(8095)
             "8095" -> { text_lib_name.text = "호계도서관" }
-            // 비산도서관(8095)
             "8096" -> { text_lib_name.text = "비산도서관" }
         }
-
 
         val fab = findViewById<View>(R.id.fab_btn) as FloatingActionButton
         fab.setOnClickListener {
@@ -64,27 +52,41 @@ class MainActivity : AppCompatActivity() {
                     Log.e("DEBUG", "BUTTON PRESSED")
                     if (isAirplaneModeOn(applicationContext)) { Toast.makeText(applicationContext, "정보 가져오기 실패 (비행기 모드)", Toast.LENGTH_LONG).show() }
                     else {
-                        if((text_waitnum).toInt() < 0) { Toast.makeText(applicationContext, "올바르지 않은 대기 번호입니다", Toast.LENGTH_LONG).show() }
+                        if((text_waitnum).toInt() <= 0) { Toast.makeText(applicationContext, "올바르지 않은 대기 번호입니다 1 이상의 수를 입력해주세요", Toast.LENGTH_LONG).show() }
                         else{
-                            // Change Preference, key_waitnum
-                            val sharedPref = PreferenceManager.getDefaultSharedPreferences(applicationContext)
-                            val edit = sharedPref.edit()
-                            edit.putString("key_waitnum", text_waitnum)
-                            edit.apply()
+                            try {
+                                // Change Preference, key_waitnum
+                                val sharedPref = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+                                val edit = sharedPref.edit()
+                                edit.putString("key_waitnum", text_waitnum)
+                                edit.apply()
+                            }catch (e:Exception){
+                                Snackbar.make(const_layout,"키 저장에 실패하였습니다", Snackbar.LENGTH_LONG)
+                                    .setActionTextColor(ContextCompat.getColor(applicationContext, R.color.textColorPrimary)).show()
+                            }
+                            
+                            try{
+                                // SetAlarm
+                                val intent = Intent(applicationContext, NotiIntentService::class.java)
+                                val pending = PendingIntent.getService(applicationContext, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT)
+                                val calendar = Calendar.getInstance()
 
-                            // SetAlarm
-                            val intent = Intent(applicationContext, NotiIntentService::class.java)
-                            val pending = PendingIntent.getService(applicationContext, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT)
-                            val calendar = Calendar.getInstance()
+                                // AlarmManager을 이용해서, 특정시간에 MyService 서비스가 시작되도록 하는 코드
+                                val am = applicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+                                am.setRepeating(
+                                    AlarmManager.RTC_WAKEUP,
+                                    calendar.timeInMillis,
+                                    2 * 60 * 1000,
+                                    pending
+                                )
+                                Snackbar.make(const_layout,"차례가 되면 알려드릴게요!", Snackbar.LENGTH_LONG)
+                                    .setActionTextColor(ContextCompat.getColor(applicationContext, R.color.textColorPrimary)).show()
 
-                            // AlarmManager을 이용해서, 특정시간에 MyService 서비스가 시작되도록 하는 코드
-                            val am = applicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-                            am.setRepeating(
-                                AlarmManager.RTC_WAKEUP,
-                                calendar.timeInMillis,
-                                1 * 60 * 1000,
-                                pending
-                            )
+                            }
+                            catch (e:Exception){
+                                Snackbar.make(const_layout,"알람 설정에 실패하였습니다", Snackbar.LENGTH_LONG)
+                                    .setActionTextColor(ContextCompat.getColor(applicationContext, R.color.textColorPrimary)).show()
+                            }
                         }
                     }
                 }
@@ -105,7 +107,13 @@ class MainActivity : AppCompatActivity() {
                 startActivity(preferenceIntent)
             }
             R.id.action_btn2 -> run {
-                lifecycleScope.launch(Dispatchers.IO) { viewModel.db.clearAllTables() }
+//                val thread = Thread(
+//                    Runnable {
+//                        val d = Jsoup.connect("http://222.233.168.6:8094").get()
+//                        val mainTable = (d.select("table")[1].text()).toString()
+//                        val temp = mainTable.split("노트북실 ")[1]
+//                        val temp2 = temp.split(" 계 ")[0]
+//                    }).start()
             }
             else -> { return super.onOptionsItemSelected(item) }
         }
@@ -135,7 +143,6 @@ class MainActivity : AppCompatActivity() {
         val time1 = System.currentTimeMillis()
         val time2 = time1 - time3
         if (time2 in 0..2000) {
-            // lifecycleScope.launch(Dispatchers.IO) { viewModel.db.clearAllTables() }
             finish()
         }
         else {

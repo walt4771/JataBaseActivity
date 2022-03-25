@@ -7,7 +7,6 @@ import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.content.SharedPreferences
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -15,10 +14,7 @@ import androidx.preference.PreferenceManager
 import org.jsoup.Jsoup
 
 class NotiIntentService : IntentService("NotiIntentService") {
-    var newLib:LibData = LibData()
-
     override fun onHandleIntent(intent: Intent?) {
-        Log.i("DEBUG", "ThreadStarted")
         var url = "http://222.233.168.6:"
 
         // 설정 가져오기
@@ -31,138 +27,22 @@ class NotiIntentService : IntentService("NotiIntentService") {
         if(url.takeLast(1) == ":") { url += "$selectedlib" } // 연속눌림 방지
         val d = Jsoup.connect(url).get()
         val table1 = (d.select("table")[1].text()).toString()
+        val table2 = table1.split("노트북실 ")[1]
+        val table3 = table2.split(" 계 ")[0]
+        val table4 = table3.split(" ")
 
-        when (selectedlib) {
-            // 박달도서관(8093)
-            "8093" -> {
-                // 문자열 처리와 띄어쓰기 예외처리, 44, 72, 103
-                val table2 = StringBuilder(table1)
-                table2.delete(0, 41)
-
-                val args = listOf("0", "2", "30", "57")
-                for (i in args) {
-                    table2.deleteCharAt((i.toInt()))
-                }
-                val table3 = String(table2)
-
-                // 객체를 따로 생성해 값 직접 대입
-                fun notebookData(str: String): LibData {
-                    val str1 = str.split(" ")
-                    val i = 16
-                    newLib.tableid = str1[i]
-                    newLib.All = str1[i + 1]
-                    newLib.using = str1[i + 2]
-                    newLib.remaining = str1[i + 3]
-                    newLib.usage = str1[i + 4]
-                    newLib.waiting = str1[i + 5]
-                    newLib.calling = str1[i + 6]
-                    newLib.scheduled = str1[i + 7]
-                    return newLib
-                }
-                newLib = notebookData(table3)
-            }
-
-            // 평촌도서관(8094)
-            "8094" -> {
-                // 문자열 처리와 띄어쓰기 예외처리, 44, 72, 103
-                val table2 = StringBuilder(table1)
-                table2.delete(0, 41)
-
-                val args = listOf("0", "2", "30", "58", "88", "118", "143")
-                for (i in args) {
-                    table2.deleteCharAt((i.toInt()))
-                }
-                val table3 = String(table2)
-
-                // 객체를 따로 생성해 값 직접 대입
-                fun notebookData(str: String): LibData {
-                    val str1 = str.split(" ")
-                    val newLib = LibData()
-                    val i = 40
-                    newLib.tableid = str1[i]
-                    newLib.All = str1[i + 1]
-                    newLib.using = str1[i + 2]
-                    newLib.remaining = str1[i + 3]
-                    newLib.usage = str1[i + 4]
-                    newLib.waiting = str1[i + 5]
-                    newLib.calling = str1[i + 6]
-                    newLib.scheduled = str1[i + 7]
-                    return newLib
-                }
-                newLib = notebookData(table3)
-            }
-
-            // 호계도서관(8095)
-            "8095" -> {
-                // 문자열 처리와 띄어쓰기 예외처리, 44, 72, 103
-                val table2 = StringBuilder(table1)
-                table2.delete(0, 41)
-
-                val args = listOf("0", "2", "4", "31", "60", "89", "91", "116")
-                for (i in args) {
-                    table2.deleteCharAt((i.toInt()))
-                }
-                val table3 = String(table2)
-
-                // 객체를 따로 생성해 값 직접 대입
-                fun notebookData(str: String): LibData {
-                    val str1 = str.split(" ")
-                    val newLib = LibData()
-                    val i = 32
-                    newLib.tableid = str1[i]
-                    newLib.All = str1[i + 1]
-                    newLib.using = str1[i + 2]
-                    newLib.remaining = str1[i + 3]
-                    newLib.usage = str1[i + 4]
-                    newLib.waiting = str1[i + 5]
-                    newLib.calling = str1[i + 6]
-                    newLib.scheduled = str1[i + 7]
-                    return newLib
-                }
-                newLib = notebookData(table3)
-            }
-
-            // 비산도서관(8095)
-            "8096" -> {
-                // 문자열 처리와 띄어쓰기 예외처리, 44, 72, 103
-                val table2 = StringBuilder(table1)
-                table2.delete(0, 41)
-
-                val args = listOf("0", "2", "29", "55")
-                for (i in args) {  table2.deleteCharAt((i.toInt())) }
-                val table3 = String(table2)
-
-                // 객체를 따로 생성해 값 직접 대입
-                fun notebookData(str: String): LibData {
-                    val str1 = str.split(" ")
-                    val newLib = LibData()
-                    val i = 16
-                    newLib.tableid = str1[i]
-                    newLib.All = str1[i + 1]
-                    newLib.using = str1[i + 2]
-                    newLib.remaining = str1[i + 3]
-                    newLib.usage = str1[i + 4]
-                    newLib.waiting = str1[i + 5]
-                    newLib.calling = str1[i + 6]
-                    newLib.scheduled = str1[i + 7]
-                    return newLib
-                }
-                newLib = notebookData(table3)
-            }
-        }
-
-        if(waitnum == newLib.calling) {
+        if(waitnum == table4[6]) {
             if(notitype){ // 메세지 인텐트
                 val intent_message = Intent(this, MessageActivity::class.java)
                 startActivity(intent_message.addFlags(FLAG_ACTIVITY_NEW_TASK));
             }
             else {
                 if(Build.VERSION.SDK_INT >= 26) {
-                    Noti_26Up()
+                    Noti_26Up("이제 노트북실을 이용할 수 있습니다", "5분 이내에 자리를 등록해주세요.")
                     waitnumInit()
                     cancelAlarm()
                 } else {
-                    Noti_26Low()
+                    Noti_26Low("이제 노트북실을 이용할 수 있습니다", "5분 이내에 자리를 등록해주세요.")
                     waitnumInit()
                     cancelAlarm()
                 }
@@ -179,7 +59,6 @@ class NotiIntentService : IntentService("NotiIntentService") {
     }
 
     private fun cancelAlarm() {
-        // SetAlarm
         val intent = Intent(applicationContext, NotiIntentService::class.java)
         val pending = PendingIntent.getService(applicationContext, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT)
 
@@ -189,7 +68,7 @@ class NotiIntentService : IntentService("NotiIntentService") {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun Noti_26Up() {
+    fun Noti_26Up(title:String, text:String) {
         // Notification Channel
         val CHANNEL_ID = "Important Notification"
         val name = "channel01"
@@ -207,8 +86,8 @@ class NotiIntentService : IntentService("NotiIntentService") {
 
         var builder = NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(R.drawable.sym_def_app_icon)
-            .setContentTitle(newLib.tableid + "의 차례가 왔습니다!")
-            .setContentText("5분 내에 자리를 등록해주세요. (호출번호: " + newLib.Calling + ")")
+            .setContentTitle(title)
+            .setContentText(text)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
 
         with(NotificationManagerCompat.from(this)) {
@@ -218,11 +97,11 @@ class NotiIntentService : IntentService("NotiIntentService") {
         }
     }
 
-    private fun Noti_26Low() {
+    private fun Noti_26Low(title:String, text:String) {
         val builder = NotificationCompat.Builder(this)
             .setSmallIcon(R.drawable.ic_dialog_alert)
-            .setContentTitle(newLib.tableid + "의 차례가 왔습니다!")
-            .setContentText("5분 내에 자리를 등록해주세요. (호출번호: " + newLib.Calling + ")")
+            .setContentTitle(title)
+            .setContentText(text)
 
         val resultIntent = Intent(this, MainActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(
