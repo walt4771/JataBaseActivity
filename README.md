@@ -18,14 +18,14 @@ add fab for a better accessability, recepit image adjustment
 Dark Mode support, change recepit image due to Dark Mode support
 ```
 
+<img src="https://github.com/walt4771/LibCrawler_Android/blob/master/LibCrawler_Light.png" height="500px" width="225px">
+
+<img src="https://github.com/walt4771/LibCrawler_Android/blob/master/LibCrawler_Dark.png" height="500px" width="225px">
+
 > 2022.03.25
 ```
 optimize application logic, logic has been slightly changed
 ```
-
-<img src="https://github.com/walt4771/LibCrawler_Android/blob/master/LibCrawler_Light.png" height="500px" width="225px">
-
-<img src="https://github.com/walt4771/LibCrawler_Android/blob/master/LibCrawler_Dark.png" height="500px" width="225px">
 
 
 # 권한 설명
