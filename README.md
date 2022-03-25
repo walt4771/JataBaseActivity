@@ -9,10 +9,11 @@
 
 # Updates
 
-> 2022.03.17
+> 2022.03.25
 ```
-add fab for a better accessability, recepit image adjustment
+optimize application logic, logic has been slightly changed
 ```
+
 > 2022.03.24
 ```
 Dark Mode support, change recepit image due to Dark Mode support
@@ -22,11 +23,10 @@ Dark Mode support, change recepit image due to Dark Mode support
 
 <img src="https://github.com/walt4771/LibCrawler_Android/blob/master/LibCrawler_Dark.png" height="500px" width="225px">
 
-> 2022.03.25
+> 2022.03.17
 ```
-optimize application logic, logic has been slightly changed
+add fab for a better accessability, recepit image adjustment
 ```
-
 
 # 권한 설명
 1.
