@@ -48,6 +48,17 @@ class NotiIntentService : IntentService("NotiIntentService") {
                 }
             }
         }
+        else if(waitnum!! > table4[6]){
+            if(Build.VERSION.SDK_INT >= 26) {
+                Noti_26Up("대기 번호 오류", "올바른 대기 번호가 아닙니다")
+                waitnumInit()
+                cancelAlarm()
+            } else {
+                Noti_26Low("대기 번호 오류", "올바른 대기번호가 아닙니다")
+                waitnumInit()
+                cancelAlarm()
+            }
+        }
     }
 
     private fun waitnumInit(){

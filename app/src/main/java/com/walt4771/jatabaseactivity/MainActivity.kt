@@ -22,6 +22,7 @@ import androidx.preference.PreferenceManager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
+import org.jsoup.Jsoup
 import java.lang.Exception
 import java.util.*
 import kotlin.collections.ArrayList
@@ -79,9 +80,11 @@ class MainActivity : AppCompatActivity() {
                                     2 * 60 * 1000,
                                     pending
                                 )
+                                // waitnum 확인 필요
+                                startService(intent)
+                                // 등록 완료 알림
                                 Snackbar.make(const_layout,"차례가 되면 알려드릴게요!", Snackbar.LENGTH_LONG)
                                     .setActionTextColor(ContextCompat.getColor(applicationContext, R.color.textColorPrimary)).show()
-
                             }
                             catch (e:Exception){
                                 Snackbar.make(const_layout,"알람 설정에 실패하였습니다", Snackbar.LENGTH_LONG)
@@ -110,7 +113,7 @@ class MainActivity : AppCompatActivity() {
 //                val thread = Thread(
 //                    Runnable {
 //                        val d = Jsoup.connect("http://222.233.168.6:8094").get()
-//                        val mainTable = (d.select("table")[1].text()).toString()
+//                        val mainTable = (d.select("table").text()).toString()
 //                        val temp = mainTable.split("노트북실 ")[1]
 //                        val temp2 = temp.split(" 계 ")[0]
 //                    }).start()
@@ -151,4 +154,3 @@ class MainActivity : AppCompatActivity() {
         }
     }
 }
-
