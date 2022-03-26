@@ -9,6 +9,11 @@
 
 # Updates
 
+> 2022.03.27
+```
+check `waitNum` before first `NotiIntentService` alarm starts
+```
+
 > 2022.03.25
 ```
 optimize application logic, logic has been slightly changed
