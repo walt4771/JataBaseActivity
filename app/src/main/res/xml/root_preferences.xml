@@ -1,0 +1,54 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory app:title="기본 설정">
+
+        <ListPreference
+            app:defaultValue="8094"
+            app:entries="@array/lib_entries"
+            app:entryValues="@array/lib_values"
+            app:key="key_libselect"
+            app:title="도서관 선택"
+            app:useSimpleSummaryProvider="true"
+            app:summary="알림을 받을 도서관을 선택합니다" />
+
+        <EditTextPreference
+            android:defaultValue="100"
+            android:key="key_waitnum"
+            android:maxLines="1"
+            app:isPreferenceVisible="false"
+            android:title="Waitnumber Preference" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="알림 설정">
+
+        <SwitchPreferenceCompat
+            app:key="key_notitype"
+            app:title="알림 형식"
+            app:summaryOn="알림을 메세지로 보냅니다"
+            app:summaryOff="일반 알림으로 보냅니다"/>
+
+        <PreferenceScreen
+            android:title="메세지 테스트"
+            app:summary="표준 요금이 부과될 수 있으며 앱에서 전화번호에 접근합니다">
+            <intent android:targetPackage="com.walt4771.jatabaseactivity"
+                android:targetClass="com.walt4771.jatabaseactivity.MessageActivity"/>
+        </PreferenceScreen>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="앱 정보">
+        <Preference
+            app:key="key_devinfo"
+            app:title="개발자 및 베타테스터 정보"
+            app:summary="개발자와 개발에 도움을 주신 고마운 분들"
+            app:fragment="com.walt4771.jatabaseactivity.DevInfoActivity" />
+
+        <Preference
+            app:key="key_build"
+            app:title="build version"
+            app:summary="0.1.0" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

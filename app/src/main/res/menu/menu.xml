@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/action_btn1"
+        android:title="설정"
+        app:showAsAction="never" />
+    <!-- always = 항상 표시, never = 오버플로우 메뉴에 표시, ifRoom = 공간이 있으면 표시 -->
+
+    <item android:id="@+id/action_btn2"
+        android:title="getCurrentData"
+        app:showAsAction="never" />
+</menu>
