@@ -9,6 +9,11 @@
 
 # Updates
 
+> 2022.03.28
+```
+deleted Message Alert
+```
+
 > 2022.03.27
 ```
 check `waitNum` before first `NotiIntentService` alarm starts
@@ -67,59 +72,3 @@ private fun isAirplaneModeOn(context: Context): Boolean {
     return Settings.Global.getInt(context.contentResolver, Settings.Global.AIRPLANE_MODE_ON, 0) != 0;  
 }
 ```
-
-<br><br>  3. 
-```xml
-<!-- Telephone Number and SMS Service -->  
-<uses-permission android:name="android.permission.READ_PHONE_STATE" />  
-<uses-permission android:name="android.permission.SEND_SMS" />
-```
-세 번째 권한은 **메세지 전송**을 위한 권한입니다. <br>
-다음 코드는 앱을 구성하는 코드의 일부입니다. 
-
-```Kotlin
-@SuppressLint("HardwareIds")  
-fun getPhoneNum(): String? {  
-    val tm: TelephonyManager = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager  
-    if (ActivityCompat.checkSelfPermission(  
-            this,  
-  Manifest.permission.READ_SMS  
-  ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(  
-            this,  
-  Manifest.permission.READ_PHONE_NUMBERS  
-  ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(  
-            this,  
-  Manifest.permission.READ_PHONE_STATE  
-  ) != PackageManager.PERMISSION_GRANTED  
-  ) {  
-        // TODO: Consider calling  
-  // ActivityCompat#requestPermissions  
-  return ""  
-  }  
-    return tm.line1Number  
-}  
-  
-@SuppressLint("HardwareIds")  
-fun sendSMS() {  
-    val phoneNo: String? = getPhoneNum()  
-    val sms: String = "Test Message by LibCrawler"  
-  if (isAirplaneModeOn(this)) {  
-        Toast.makeText(applicationContext, "메세지 전송 실패 (비행기 모드)", Toast.LENGTH_SHORT).show()  
-        finish()  
-    } else {  
-        try {  
-            val smsManager = SmsManager.getDefault()  
-            smsManager.sendTextMessage(phoneNo, null, sms, null, null)  
-        } catch (e: Exception) {  
-            Toast.makeText(  
-                applicationContext,  
-  "메세지 전송 실패",  
-  Toast.LENGTH_LONG  
-  ).show()  
-            e.printStackTrace()  
-        }  
-    }  
-}
-```
-`READ_PHONE_STATE` 권한이 추가로 필요한 이유는 `SmsManager`가 메시지를 보내기 전 휴대 전화 상태를 확인하기 때문입니다. 
-
