@@ -5,8 +5,7 @@
     <!-- Internet Access -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- Telephone Number and SMS Service -->
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.SEND_SMS" />
+<!--    <uses-permission android:name="android.permission.READ_PHONE_STATE" />-->
 
     <application
         android:allowBackup="false"
@@ -26,7 +25,6 @@
             android:name=".NotiIntentService"
             android:exported="false" />
 
-        <activity android:name=".MessageActivity" />
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings"

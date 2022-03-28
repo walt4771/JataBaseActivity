@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.content.SharedPreferences
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -30,34 +31,16 @@ class NotiIntentService : IntentService("NotiIntentService") {
         val table2 = table1.split("노트북실 ")[1]
         val table3 = table2.split(" 계 ")[0]
         val table4 = table3.split(" ")
+        Log.e("Req", "requested to $selectedlib")
 
         if(waitnum == table4[6]) {
-            if(notitype){ // 메세지 인텐트
-                val intent_message = Intent(this, MessageActivity::class.java)
-                startActivity(intent_message.addFlags(FLAG_ACTIVITY_NEW_TASK));
-            }
-            else {
-                if(Build.VERSION.SDK_INT >= 26) {
-                    Noti_26Up("이제 노트북실을 이용할 수 있습니다", "5분 이내에 자리를 등록해주세요.")
-                    waitnumInit()
-                    cancelAlarm()
-                } else {
-                    Noti_26Low("이제 노트북실을 이용할 수 있습니다", "5분 이내에 자리를 등록해주세요.")
-                    waitnumInit()
-                    cancelAlarm()
-                }
-            }
-        }
-        else if(waitnum!! > table4[6]){
-            if(Build.VERSION.SDK_INT >= 26) {
-                Noti_26Up("대기 번호 오류", "올바른 대기 번호가 아닙니다")
-                waitnumInit()
-                cancelAlarm()
-            } else {
-                Noti_26Low("대기 번호 오류", "올바른 대기번호가 아닙니다")
-                waitnumInit()
-                cancelAlarm()
-            }
+            integratedNotification("이제 노트북실을 이용할 수 있습니다", "5분 이내에 자리를 등록해주세요.")
+            waitnumInit()
+            cancelAlarm()
+        } else if(waitnum!! > table4[6]){
+            integratedNotification("대기 번호 오류", "올바른 대기 번호가 아닙니다")
+            waitnumInit()
+            cancelAlarm()
         }
     }
 
@@ -78,56 +61,55 @@ class NotiIntentService : IntentService("NotiIntentService") {
         am.cancel(pending)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun Noti_26Up(title:String, text:String) {
-        // Notification Channel
-        val CHANNEL_ID = "Important Notification"
-        val name = "channel01"
-        val descriptionText = "channel_for_MM"
+    private fun integratedNotification(title: String, content: String) {
+        if(Build.VERSION.SDK_INT >= 26) {
+            // Notification Channel
+            val CHANNEL_ID = "Important Notification"
+            val name = "channel01"
+            val descriptionText = "channel_for_MM"
 
-        // Create the NotificationChannel
-        val importance = NotificationManager.IMPORTANCE_HIGH
-        val mChannel = NotificationChannel(CHANNEL_ID, name, importance)
-        mChannel.description = descriptionText
+            // Create the NotificationChannel
+            val importance = NotificationManager.IMPORTANCE_HIGH
+            val mChannel = NotificationChannel(CHANNEL_ID, name, importance)
+            mChannel.description = descriptionText
 
-        // Register Channel
-        val notificationManager =
-            getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.createNotificationChannel(mChannel)
+            // Register Channel
+            val notificationManager =
+                getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(mChannel)
 
-        var builder = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setSmallIcon(R.drawable.sym_def_app_icon)
-            .setContentTitle(title)
-            .setContentText(text)
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            var builder = NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(R.drawable.sym_def_app_icon)
+                .setContentTitle(title)
+                .setContentText(content)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
 
-        with(NotificationManagerCompat.from(this)) {
-            // notificationId is a unique int for each notification that you must define
-            val notificationId: Int = 1000
-            notify(notificationId, builder.build())
+            with(NotificationManagerCompat.from(this)) {
+                // notificationId is a unique int for each notification that you must define
+                val notificationId: Int = 1000
+                notify(notificationId, builder.build())
+            }
+        } else {
+            val builder = NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.ic_dialog_alert)
+                .setContentTitle(title)
+                .setContentText(content)
+
+            val resultIntent = Intent(this, MainActivity::class.java)
+            val pendingIntent = PendingIntent.getActivity(
+                this,
+                0,
+                resultIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT
+            )
+            builder.setContentIntent(pendingIntent)
+
+            val notification = builder.build()
+            notification.flags = Notification.FLAG_AUTO_CANCEL
+
+            val notificationManager =
+                NotificationManagerCompat.from(this)
+            notificationManager.notify(0, notification)
         }
-    }
-
-    private fun Noti_26Low(title:String, text:String) {
-        val builder = NotificationCompat.Builder(this)
-            .setSmallIcon(R.drawable.ic_dialog_alert)
-            .setContentTitle(title)
-            .setContentText(text)
-
-        val resultIntent = Intent(this, MainActivity::class.java)
-        val pendingIntent = PendingIntent.getActivity(
-            this,
-            0,
-            resultIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT
-        )
-        builder.setContentIntent(pendingIntent)
-
-        val notification = builder.build()
-        notification.flags = Notification.FLAG_AUTO_CANCEL
-
-        val notificationManager =
-            NotificationManagerCompat.from(this)
-        notificationManager.notify(0, notification)
     }
 }

@@ -21,23 +21,6 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="알림 설정">
-
-        <SwitchPreferenceCompat
-            app:key="key_notitype"
-            app:title="알림 형식"
-            app:summaryOn="알림을 메세지로 보냅니다"
-            app:summaryOff="일반 알림으로 보냅니다"/>
-
-        <PreferenceScreen
-            android:title="메세지 테스트"
-            app:summary="표준 요금이 부과될 수 있으며 앱에서 전화번호에 접근합니다">
-            <intent android:targetPackage="com.walt4771.jatabaseactivity"
-                android:targetClass="com.walt4771.jatabaseactivity.MessageActivity"/>
-        </PreferenceScreen>
-
-    </PreferenceCategory>
-
     <PreferenceCategory app:title="앱 정보">
         <Preference
             app:key="key_devinfo"

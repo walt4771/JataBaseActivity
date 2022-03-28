@@ -54,6 +54,7 @@
         android:layout_width="285dp"
         android:layout_height="27dp"
         android:layout_marginBottom="40dp"
+        android:gravity="center"
         android:text="버튼을 누르면 차례에 알려 드립니다"
         android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"

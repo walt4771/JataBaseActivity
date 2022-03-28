@@ -97,6 +97,18 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        val sharedPreferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(application)
+        when (sharedPreferences.getString("key_libselect", "8094")) {
+            "8093" -> { text_lib_name.text = "박달도서관" }
+            "8094" -> { text_lib_name.text = "평촌도서관" }
+            "8095" -> { text_lib_name.text = "호계도서관" }
+            "8096" -> { text_lib_name.text = "비산도서관" }
+        }
+    }
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu, menu)
         return true
