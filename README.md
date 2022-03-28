@@ -34,7 +34,7 @@ Dark Mode support, change recepit image due to Dark Mode support
 add fab for a better accessability, recepit image adjustment
 ```
 
-# 권한 설명
+# Permissions
 1.
 ```xml
 <!-- Internet Access -->
